@@ -1,3 +1,7 @@
+#### Important packages
+install.packages("Information")
+library(Information)
+
 #### Loading the data
 Credit_Bureau_Data <- read.csv("Credit Bureau data.csv", header = TRUE, na.strings = c(""," ","NA"))
 Demographic_Data <- read.csv("Demographic data.csv", header = TRUE, na.strings = c(""," ","NA"))
@@ -39,3 +43,25 @@ matching <- match(Credit_Bureau_Data$Application.ID,Demographic_Data$Application
 sum(which(matching==0))
 # Since there is no 0 value. All the application ids are present in both the data frames
 
+Credit_Bureau_Data_copy <- Credit_Bureau_Data
+Demographic_Data_copy <- Demographic_Data
+
+Credit_Bureau_Data_copy[] <- lapply(Credit_Bureau_Data_copy,factor)
+Demographic_Data_copy[] <- lapply(Demographic_Data_copy,factor)
+str(Credit_Bureau_Data_copy)
+str(Demographic_Data_copy)
+
+#### Preparing master file by combining both
+MasterData <- merge(Credit_Bureau_Data_copy,Demographic_Data_copy,by="Application.ID",all = FALSE)
+
+## Removing duplicate columns of performance tag
+MasterData$Performance.Tag.x <- NULL
+
+## Renaming the Performance.Tag.y to Performance.Tag
+names(MasterData)[names(MasterData) == 'Performance.Tag.y'] <- 'Performance.Tag'
+
+## Creating a duplicate data frame for MasterData
+MasterData_copy <- MasterData
+
+#### WOE and IV
+IV <- create_infotables(data=MasterData_copy, y="Performance.Tag", bins=10, parallel=FALSE)
