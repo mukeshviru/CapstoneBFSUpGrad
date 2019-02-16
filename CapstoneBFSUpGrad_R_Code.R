@@ -1,10 +1,11 @@
 #### Important packages
-install.packages("Information")
-library(Information)
+#install.packages("Information")
+#library(Information)
+#library(ggplot2)
 
 #### Loading the data
-Credit_Bureau_Data <- read.csv("Credit Bureau data.csv", header = TRUE, na.strings = c(""," ","NA"))
-Demographic_Data <- read.csv("Demographic data.csv", header = TRUE, na.strings = c(""," ","NA"))
+Credit_Bureau_Data <- read.csv("Credit Bureau data.csv", header = TRUE, na.strings = c(""," ","NA"),stringsAsFactors = FALSE)
+Demographic_Data <- read.csv("Demographic data.csv", header = TRUE, na.strings = c(""," ","NA"),stringsAsFactors = FALSE)
 
 #### Check structure of the data frames
 str(Credit_Bureau_Data)
@@ -34,22 +35,17 @@ sapply(Credit_Bureau_Data,function(x) sum(is.na(x)))
 sapply(Demographic_Data,function(x) sum(is.na(x)))
 # There are 1425 records in each data frames where Perfromance Tag (dependent variable) have NAs
 
-## Removing the rows of duplicate application ids
+## Storing the records whose performance tag have NA in another data frame for future analysis and removing them from current data frame
+NA_PerfTag_Credit_Bureau <- Credit_Bureau_Data[which(is.na(Credit_Bureau_Data$Performance.Tag)),]
 Credit_Bureau_Data <- Credit_Bureau_Data[-which(is.na(Credit_Bureau_Data$Performance.Tag)),]
+
+NA_PerfTag_Demographic <- Demographic_Data[which(is.na(Demographic_Data$Performance.Tag)),]
 Demographic_Data <- Demographic_Data[-which(is.na(Demographic_Data$Performance.Tag)),]
 
 #### Comparing Application ID in both the data frames
 matching <- match(Credit_Bureau_Data$Application.ID,Demographic_Data$Application.ID,nomatch = 0)
 sum(which(matching==0))
 # Since there is no 0 value. All the application ids are present in both the data frames
-
-Credit_Bureau_Data_copy <- Credit_Bureau_Data
-Demographic_Data_copy <- Demographic_Data
-
-Credit_Bureau_Data_copy[] <- lapply(Credit_Bureau_Data_copy,factor)
-Demographic_Data_copy[] <- lapply(Demographic_Data_copy,factor)
-str(Credit_Bureau_Data_copy)
-str(Demographic_Data_copy)
 
 #### Preparing master file by combining both
 MasterData <- merge(Credit_Bureau_Data_copy,Demographic_Data_copy,by="Application.ID",all = FALSE)
@@ -63,5 +59,37 @@ names(MasterData)[names(MasterData) == 'Performance.Tag.y'] <- 'Performance.Tag'
 ## Creating a duplicate data frame for MasterData
 MasterData_copy <- MasterData
 
+## Converting Performance tag & Oustanding Balance to numeric
+MasterData_copy$Performance.Tag <- as.numeric(as.character(MasterData_copy$Performance.Tag))
+MasterData_copy$Outstanding.Balance <- as.numeric(as.character(MasterData_copy$Outstanding.Balance))
+
+
+#### EDA Analysis using ggplot
+
+Cor_mat <- round(cor(MasterData_copy),2)
+
+## Analysis of No.of.times.90.DPD.or.worse.in.last.6.months
+
+ggplot(Master_Data,
+       aes(
+         x = Master_Data$Type.of.residence,
+         fill = factor(Master_Data$Performance.Tag)
+       )) + geom_bar(position = "fill") + ggtitle("Distribution of Residence Type over Performance Tag") + xlab("Residence") + ylab("count") + labs(fill =
+                                                                                                                                                      "Performance Tag")
+
 #### WOE and IV
-IV <- create_infotables(data=MasterData_copy, y="Performance.Tag", bins=10, parallel=FALSE)
+IV <- create_infotables(data=MasterData_copy, y="Performance.Tag", bins=10, parallel=TRUE)
+
+IV_Value <- data.frame(IV$Summary)
+IV_Value
+
+print(IV$Tables$No.of.times.90.DPD.or.worse.in.last.6.months, row.names=FALSE)
+
+## Variables' having IV value below 0.02 are not useful for prediction
+## Hence the useful variables for prediction are
+IV_Useful_Variables <- IV_Value[IV_Value$IV>=0.02,]
+
+woe_data <- MasterData_copy
+
+table(MasterData_copy$Performance.Tag)
+
