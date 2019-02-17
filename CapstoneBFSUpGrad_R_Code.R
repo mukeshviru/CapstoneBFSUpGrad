@@ -5,6 +5,7 @@
 #library(reshape2)
 #require(scales)
 #library(dplyr)
+#library(gridExtra)
 
 #### Loading the data
 Credit_Bureau_Data <- read.csv("Credit Bureau data.csv", header = TRUE, na.strings = c(""," ","NA"),stringsAsFactors = FALSE)
@@ -177,3 +178,84 @@ ggplot(d2, aes(x = factor(No.of.times.30.DPD.or.worse.in.last.6.months),Performa
   geom_bar(stat="identity", width = 0.7) +
   labs(x = "No.of.times.30.DPD.or.worse.in.last.6.months", y = "Percent", fill = "Performance Tag") +
   theme_minimal(base_size = 14)
+
+## Analysis of No.of.times.90.DPD.or.worse.in.last.12.months
+d1<-ggplot(MasterData_copy, aes(x = factor(No.of.times.90.DPD.or.worse.in.last.12.months),fill=factor(MasterData_copy$Performance.Tag))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  scale_y_continuous(labels = percent)
+
+d2<-ggplot(MasterData_copy, aes(x = factor(No.of.times.90.DPD.or.worse.in.last.12.months),fill=factor(MasterData_copy$Performance.Tag))) +geom_bar ()+geom_text(stat='count',aes(label=..count..),vjust=-.1) 
+  
+aa <- grid.arrange( d2,  d1, ncol=2)
+
+## Analysis of No.of.times.30.DPD.or.worse.in.last.12.months
+d1<-ggplot(MasterData_copy, aes(x = factor(No.of.times.30.DPD.or.worse.in.last.12.months),fill=factor(MasterData_copy$Performance.Tag))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  scale_y_continuous(labels = percent)
+
+d2<-ggplot(MasterData_copy, aes(x = factor(No.of.times.30.DPD.or.worse.in.last.12.months),fill=factor(MasterData_copy$Performance.Tag))) +geom_bar ()+geom_text(stat='count',aes(label=..count..),vjust=-.1) 
+
+aa1 <- grid.arrange( d2,  d1, ncol=2)
+
+## Analysis of No.of.times.60.DPD.or.worse.in.last.6.months
+d1<-ggplot(MasterData_copy, aes(x = factor(No.of.times.60.DPD.or.worse.in.last.6.months),fill=factor(MasterData_copy$Performance.Tag))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  scale_y_continuous(labels = percent)
+
+d2<-ggplot(MasterData_copy, aes(x = factor(No.of.times.60.DPD.or.worse.in.last.6.months),fill=factor(MasterData_copy$Performance.Tag))) +geom_bar ()+geom_text(stat='count',aes(label=..count..),vjust=-.1) 
+
+aa2 <- grid.arrange( d2,  d1, ncol=2)
+
+## Analysis of No.of.Inquiries.in.last.6.months..excluding.home...auto.loans.
+d1<-ggplot(MasterData_copy, aes(x = factor(No.of.Inquiries.in.last.6.months..excluding.home...auto.loans.),fill=factor(MasterData_copy$Performance.Tag))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  scale_y_continuous(labels = percent)
+
+d2<-ggplot(MasterData_copy, aes(x = factor(No.of.Inquiries.in.last.6.months..excluding.home...auto.loans.),fill=factor(MasterData_copy$Performance.Tag))) +geom_bar ()+geom_text(stat='count',aes(label=..count..),vjust=-.1) 
+
+aa3 <- grid.arrange( d2,  d1, ncol=2)
+
+## Analysis of No.of.trades.opened.in.last.6.months
+d1<-ggplot(MasterData_copy, aes(x = factor(No.of.trades.opened.in.last.6.months),fill=factor(MasterData_copy$Performance.Tag))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  scale_y_continuous(labels = percent)
+
+d2<-ggplot(MasterData_copy, aes(x = factor(No.of.trades.opened.in.last.6.months),fill=factor(MasterData_copy$Performance.Tag))) +geom_bar ()+geom_text(stat='count',aes(label=..count..),vjust=-.1) 
+
+aa4 <- grid.arrange( d2,  d1, ncol=2)
+
+## Analysis of No.of.times.60.DPD.or.worse.in.last.12.months
+d1<-ggplot(MasterData_copy, aes(x = factor(No.of.times.60.DPD.or.worse.in.last.12.months),fill=factor(MasterData_copy$Performance.Tag))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  scale_y_continuous(labels = percent)
+
+d2<-ggplot(MasterData_copy, aes(x = factor(No.of.times.60.DPD.or.worse.in.last.12.months),fill=factor(MasterData_copy$Performance.Tag))) +geom_bar ()+geom_text(stat='count',aes(label=..count..),vjust=-.1) 
+
+aa5 <- grid.arrange( d2,  d1, ncol=2)
+
+## Analysis of No.of.times.90.DPD.or.worse.in.last.6.months
+d1<-ggplot(MasterData_copy, aes(x = factor(No.of.times.90.DPD.or.worse.in.last.6.months),fill=factor(MasterData_copy$Performance.Tag))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  scale_y_continuous(labels = percent)
+
+d2<-ggplot(MasterData_copy, aes(x = factor(No.of.times.90.DPD.or.worse.in.last.6.months),fill=factor(MasterData_copy$Performance.Tag))) +geom_bar ()+geom_text(stat='count',aes(label=..count..),vjust=-.1) 
+
+
+aa6 <- grid.arrange( d2,  d1, ncol=2)
+
+## Analysis of No.of.PL.trades.opened.in.last.6.months
+d1<-ggplot(MasterData_copy, aes(x = factor(No.of.PL.trades.opened.in.last.6.months),fill=factor(MasterData_copy$Performance.Tag))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  scale_y_continuous(labels = percent)
+
+d2<-ggplot(MasterData_copy, aes(x = factor(No.of.PL.trades.opened.in.last.6.months),fill=factor(MasterData_copy$Performance.Tag))) +geom_bar ()+geom_text(stat='count',aes(label=..count..),vjust=-.1) 
+
+
+aa7 <- grid.arrange( d2,  d1, ncol=2)
+
+## Analysis of Total.No.of.Trades
+trades<-ggplot(MasterData_copy, aes(x = factor(Total.No.of.Trades),fill=factor(MasterData_copy$Performance.Tag))) +  
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  scale_y_continuous(labels = percent)
+
+trades
