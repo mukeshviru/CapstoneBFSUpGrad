@@ -2,6 +2,7 @@
 #install.packages("Information")
 #library(Information)
 #library(ggplot2)
+#library(reshape2)
 
 #### Loading the data
 Credit_Bureau_Data <- read.csv("Credit Bureau data.csv", header = TRUE, na.strings = c(""," ","NA"),stringsAsFactors = FALSE)
@@ -48,46 +49,48 @@ sum(which(matching==0))
 # Since there is no 0 value. All the application ids are present in both the data frames
 
 #### Preparing master file by combining both
-MasterData <- merge(Credit_Bureau_Data_copy,Demographic_Data_copy,by="Application.ID",all = FALSE)
+MasterData <- merge(Credit_Bureau_Data,Demographic_Data,by="Application.ID",all = FALSE)
 
-## Removing duplicate columns of performance tag
+## Removing duplicate columns of performance tag found in the MasterData dataframe
 MasterData$Performance.Tag.x <- NULL
 
 ## Renaming the Performance.Tag.y to Performance.Tag
 names(MasterData)[names(MasterData) == 'Performance.Tag.y'] <- 'Performance.Tag'
 
-## Creating a duplicate data frame for MasterData
-MasterData_copy <- MasterData
-
-## Converting Performance tag & Oustanding Balance to numeric
-MasterData_copy$Performance.Tag <- as.numeric(as.character(MasterData_copy$Performance.Tag))
-MasterData_copy$Outstanding.Balance <- as.numeric(as.character(MasterData_copy$Outstanding.Balance))
-
-
-#### EDA Analysis using ggplot
-
-Cor_mat <- round(cor(MasterData_copy),2)
-
-## Analysis of No.of.times.90.DPD.or.worse.in.last.6.months
-
-ggplot(Master_Data,
-       aes(
-         x = Master_Data$Type.of.residence,
-         fill = factor(Master_Data$Performance.Tag)
-       )) + geom_bar(position = "fill") + ggtitle("Distribution of Residence Type over Performance Tag") + xlab("Residence") + ylab("count") + labs(fill =
-                                                                                                                                                      "Performance Tag")
-
 #### WOE and IV
-IV <- create_infotables(data=MasterData_copy, y="Performance.Tag", bins=10, parallel=TRUE)
+MasterData_copy <- MasterData
+colnames(MasterData_copy)
 
+## Removing Application ID as it is not required for WOE/IV analysis
+MasterData_copy$Application.ID <- NULL
+
+## Converting all independent vaariables to factor
+MasterData_copy[] <- lapply( MasterData_copy, factor)
+MasterData_copy$Performance.Tag <- as.numeric(as.character(MasterData_copy$Performance.Tag))
+
+## Converted the variables having more than 20 levels to numeric so as to bin it and calculate WOE
+col_names <- c('Avgas.CC.Utilization.in.last.12.months','Outstanding.Balance','No.of.trades.opened.in.last.12.months','No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.','Total.No.of.Trades','Income','No.of.months.in.current.residence','No.of.months.in.current.company')
+MasterData_copy[, col_names] <- lapply(col_names, function(x) as.numeric(as.character(MasterData_copy[[x]])))
+
+## Calculation of WOE and IV
+IV <- create_infotables(data=MasterData_copy, y="Performance.Tag", bins=10, parallel=TRUE)
 IV_Value <- data.frame(IV$Summary)
 IV_Value
-
-print(IV$Tables$No.of.times.90.DPD.or.worse.in.last.6.months, row.names=FALSE)
 
 ## Variables' having IV value below 0.02 are not useful for prediction
 ## Hence the useful variables for prediction are
 IV_Useful_Variables <- IV_Value[IV_Value$IV>=0.02,]
+
+print(IV$Tables$Avgas.CC.Utilization.in.last.12.months, row.names=FALSE)
+
+#### EDA Analysis using ggplot
+MasterData_copy$Performance.Tag <- as.factor(MasterData_copy$Performance.Tag)
+ggplot(MasterData_copy, aes(No.of.times.90.DPD.or.worse.in.last.6.months))+geom_bar(aes(fill=Performance.Tag))
+ggplot(MasterData_copy, aes(No.of.times.90.DPD.or.worse.in.last.6.months)) + 
+  geom_bar(aes(fill = Performance.Tag))
+
+
+
 
 woe_data <- MasterData_copy
 
