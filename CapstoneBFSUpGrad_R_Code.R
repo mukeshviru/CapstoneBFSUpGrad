@@ -85,21 +85,95 @@ IV_Useful_Variables <- IV_Value[IV_Value$IV>=0.02,]
 IV_Useful_Variables
 ## Hence we see 18 variables are very useful in prediction
 
-print(IV$Tables$Avgas.CC.Utilization.in.last.12.months, row.names=FALSE)
 
 #### EDA Analysis using ggplot
 MasterData_copy$Performance.Tag <- as.factor(MasterData_copy$Performance.Tag)
 
+## Analysis of Avgas.CC.Utilization.in.last.12.months
 print(IV$Tables$Avgas.CC.Utilization.in.last.12.months, row.names=FALSE)
+
+## Binning the variable Avgas.CC.Utilization.in.last.12.months for proper analysis
+MasterData_copy$binning.Avgas.CC.Utilization.in.last.12.months <- as.factor(cut(MasterData_copy$Avgas.CC.Utilization.in.last.12.months, breaks = c(NA, 0, 4, 6, 8, 11, 14, 21,37, 51, 71, 113),include.lowest = TRUE))
+
 d2 <- MasterData_copy %>% 
-  group_by(Avgas.CC.Utilization.in.last.12.months,Performance.Tag) %>% 
+  group_by(binning.Avgas.CC.Utilization.in.last.12.months,Performance.Tag) %>% 
   summarise(count=n()) %>% 
   mutate(perc=count/sum(count))
 
-ggplot(d2, aes(x = factor(Avgas.CC.Utilization.in.last.12.months), y = perc*100, fill = factor(Performance.Tag))) +
+ggplot(d2, aes(x = binning.Avgas.CC.Utilization.in.last.12.months,Performance.Tag, y = perc*100, fill = factor(Performance.Tag))) +
   geom_bar(stat="identity", width = 0.7) +
   labs(x = "Avgas.CC.Utilization.in.last.12.months", y = "Percent", fill = "Performance Tag") +
   theme_minimal(base_size = 14)
 
+## Analysis of No.of.PL.trades.opened.in.last.12.months
+print(IV$Tables$No.of.PL.trades.opened.in.last.12.months, row.names=FALSE)
+d2 <- MasterData_copy %>% 
+  group_by(No.of.PL.trades.opened.in.last.12.months,Performance.Tag) %>% 
+  summarise(count=n()) %>% 
+  mutate(perc=count/sum(count))
 
+ggplot(d2, aes(x = factor(No.of.PL.trades.opened.in.last.12.months),Performance.Tag, y = perc*100, fill = factor(Performance.Tag))) +
+  geom_bar(stat="identity", width = 0.7) +
+  labs(x = "No.of.PL.trades.opened.in.last.12.months", y = "Percent", fill = "Performance Tag") +
+  theme_minimal(base_size = 14)
 
+## Analysis of No.of.trades.opened.in.last.12.months
+print(IV$Tables$No.of.trades.opened.in.last.12.months, row.names=FALSE)
+
+## Binning the variable No.of.trades.opened.in.last.12.months for proper analysis
+MasterData_copy$binning.No.of.trades.opened.in.last.12.months <- as.factor(cut(MasterData_copy$No.of.trades.opened.in.last.12.months, breaks = c(0, 1, 2, 3, 5, 7, 9, 12, 28),include.lowest = TRUE))
+
+d2 <- MasterData_copy %>% 
+  group_by(binning.No.of.trades.opened.in.last.12.months,Performance.Tag) %>% 
+  summarise(count=n()) %>% 
+  mutate(perc=count/sum(count))
+
+ggplot(d2, aes(x = binning.No.of.trades.opened.in.last.12.months,Performance.Tag, y = perc*100, fill = factor(Performance.Tag))) +
+  geom_bar(stat="identity", width = 0.7) +
+  labs(x = "No.of.trades.opened.in.last.12.months", y = "Percent", fill = "Performance Tag") +
+  theme_minimal(base_size = 14)
+
+## Analysis of No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.
+print(IV$Tables$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.,row.names = FALSE)
+
+## Binning the variable No.of.Inquiries.in.last.12.months..excluding.home...auto.loans. for proper analysis
+MasterData_copy$binning.No.of.Inquiries.in.last.12.months..excluding.home...auto.loans. <- as.factor(cut(MasterData_copy$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans., breaks = c(0, 1, 2, 3, 5, 8, 20),include.lowest = TRUE))
+
+d2 <- MasterData_copy %>% 
+  group_by(binning.No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.,Performance.Tag) %>% 
+  summarise(count=n()) %>% 
+  mutate(perc=count/sum(count))
+
+ggplot(d2, aes(x = binning.No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.,Performance.Tag, y = perc*100, fill = factor(Performance.Tag))) +
+  geom_bar(stat="identity", width = 0.7) +
+  labs(x = "No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.No.of.trades.opened.in.last.12.months", y = "Percent", fill = "Performance Tag") +
+  theme_minimal(base_size = 14)
+
+## Analysis of Outstanding.Balance
+print(IV$Tables$Outstanding.Balance,row.names = FALSE)
+
+## Binning the variable Outstanding.Balance for proper analysis
+MasterData_copy$binning.Outstanding.Balance <- as.factor(cut(MasterData_copy$Outstanding.Balance, breaks = c(NA, 6843, 25509, 386813, 585402, 774228, 972455, 1357300, 2960998, 3282314, 5218801),include.lowest = TRUE))
+
+d2 <- MasterData_copy %>% 
+  group_by(binning.Outstanding.Balance,Performance.Tag) %>% 
+  summarise(count=n()) %>% 
+  mutate(perc=count/sum(count))
+
+ggplot(d2, aes(x = binning.Outstanding.Balance,Performance.Tag, y = perc*100, fill = factor(Performance.Tag))) +
+  geom_bar(stat="identity", width = 0.7) +
+  labs(x = "Outstanding.Balance", y = "Percent", fill = "Performance Tag") +
+  theme_minimal(base_size = 14) + theme(axis.text.x = element_text(angle = 90, hjust = 0.1))
+
+## Analysis of No.of.times.30.DPD.or.worse.in.last.6.months
+print(IV$Tables$No.of.times.30.DPD.or.worse.in.last.6.months,row.names = FALSE)
+
+d2 <- MasterData_copy %>% 
+  group_by(No.of.times.30.DPD.or.worse.in.last.6.months,Performance.Tag) %>% 
+  summarise(count=n()) %>% 
+  mutate(perc=count/sum(count))
+
+ggplot(d2, aes(x = factor(No.of.times.30.DPD.or.worse.in.last.6.months),Performance.Tag, y = perc*100, fill = factor(Performance.Tag))) +
+  geom_bar(stat="identity", width = 0.7) +
+  labs(x = "No.of.times.30.DPD.or.worse.in.last.6.months", y = "Percent", fill = "Performance Tag") +
+  theme_minimal(base_size = 14)
