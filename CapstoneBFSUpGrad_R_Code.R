@@ -3,6 +3,8 @@
 #library(Information)
 #library(ggplot2)
 #library(reshape2)
+#require(scales)
+#library(dplyr)
 
 #### Loading the data
 Credit_Bureau_Data <- read.csv("Credit Bureau data.csv", header = TRUE, na.strings = c(""," ","NA"),stringsAsFactors = FALSE)
@@ -80,19 +82,24 @@ IV_Value
 ## Variables' having IV value below 0.02 are not useful for prediction
 ## Hence the useful variables for prediction are
 IV_Useful_Variables <- IV_Value[IV_Value$IV>=0.02,]
+IV_Useful_Variables
+## Hence we see 18 variables are very useful in prediction
 
 print(IV$Tables$Avgas.CC.Utilization.in.last.12.months, row.names=FALSE)
 
 #### EDA Analysis using ggplot
 MasterData_copy$Performance.Tag <- as.factor(MasterData_copy$Performance.Tag)
-ggplot(MasterData_copy, aes(No.of.times.90.DPD.or.worse.in.last.6.months))+geom_bar(aes(fill=Performance.Tag))
-ggplot(MasterData_copy, aes(No.of.times.90.DPD.or.worse.in.last.6.months)) + 
-  geom_bar(aes(fill = Performance.Tag))
+
+print(IV$Tables$Avgas.CC.Utilization.in.last.12.months, row.names=FALSE)
+d2 <- MasterData_copy %>% 
+  group_by(Avgas.CC.Utilization.in.last.12.months,Performance.Tag) %>% 
+  summarise(count=n()) %>% 
+  mutate(perc=count/sum(count))
+
+ggplot(d2, aes(x = factor(Avgas.CC.Utilization.in.last.12.months), y = perc*100, fill = factor(Performance.Tag))) +
+  geom_bar(stat="identity", width = 0.7) +
+  labs(x = "Avgas.CC.Utilization.in.last.12.months", y = "Percent", fill = "Performance Tag") +
+  theme_minimal(base_size = 14)
 
 
-
-
-woe_data <- MasterData_copy
-
-table(MasterData_copy$Performance.Tag)
 
