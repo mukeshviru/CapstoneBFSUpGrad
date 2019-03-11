@@ -1,11 +1,11 @@
 #### Important packages
-#install.packages("Information")
-#library(Information)
-#library(ggplot2)
-#library(reshape2)
-#require(scales)
-#library(dplyr)
-#library(gridExtra)
+install.packages("Information")
+library(Information)
+library(ggplot2)
+library(reshape2)
+require(scales)
+library(dplyr)
+library(gridExtra)
 
 #### Loading the data
 Credit_Bureau_Data <- read.csv("Credit Bureau data.csv", header = TRUE, na.strings = c(""," ","NA"),stringsAsFactors = FALSE)
@@ -77,6 +77,7 @@ MasterData_copy[, col_names] <- lapply(col_names, function(x) as.numeric(as.char
 
 ## Calculation of WOE and IV
 IV <- create_infotables(data=MasterData_copy, y="Performance.Tag", bins=10, parallel=TRUE)
+IV1 <- create_infotables(data=MasterData_copy, y="Performance.Tag", bins=10, parallel=TRUE)
 IV_Value <- data.frame(IV$Summary)
 IV_Value
 
@@ -259,3 +260,92 @@ trades<-ggplot(MasterData_copy, aes(x = factor(Total.No.of.Trades),fill=factor(M
   scale_y_continuous(labels = percent)
 
 trades
+
+#### WOE Transformation
+WOE_transformed <- MasterData
+
+
+## attribute - Avgas.CC.Utilization.in.last.12.months
+print(IV$Tables$Avgas.CC.Utilization.in.last.12.months, row.names=FALSE)
+
+WOE_transformed$Avgas.CC.Utilization.in.last.12.months[which(is.na(WOE_transformed$Avgas.CC.Utilization.in.last.12.months))] <- 0.11
+WOE_transformed$Avgas.CC.Utilization.in.last.12.months <- ifelse(WOE_transformed$Avgas.CC.Utilization.in.last.12.months>=72,0.39,
+                                                                 ifelse(WOE_transformed$Avgas.CC.Utilization.in.last.12.months>=52,0.56,
+                                                                        ifelse(WOE_transformed$Avgas.CC.Utilization.in.last.12.months>=38,0.58,
+                                                                               ifelse(WOE_transformed$Avgas.CC.Utilization.in.last.12.months>=22,0.47,
+                                                                                      ifelse(WOE_transformed$Avgas.CC.Utilization.in.last.12.months>=15,-0.08,
+                                                                                             ifelse(WOE_transformed$Avgas.CC.Utilization.in.last.12.months>=12,-0.47,
+                                                                                                    ifelse(WOE_transformed$Avgas.CC.Utilization.in.last.12.months>=9,-0.67,
+                                                                                                           ifelse(WOE_transformed$Avgas.CC.Utilization.in.last.12.months>=7,-0.79,
+                                                                                                                  ifelse(WOE_transformed$Avgas.CC.Utilization.in.last.12.months>=5,-0.8,
+                                                                                                                         ifelse(WOE_transformed$Avgas.CC.Utilization.in.last.12.months>=0,-0.8,0.11))))))))))
+
+## attribute - No.of.trades.opened.in.last.12.months
+print(IV$Tables$No.of.trades.opened.in.last.12.months)
+
+WOE_transformed$No.of.trades.opened.in.last.12.months <- ifelse(WOE_transformed$No.of.trades.opened.in.last.12.months>=13,0.01,
+                                                                ifelse(WOE_transformed$No.of.trades.opened.in.last.12.months>=10,0.49,
+                                                                       ifelse(WOE_transformed$No.of.trades.opened.in.last.12.months>=8,0.57,
+                                                                              ifelse(WOE_transformed$No.of.trades.opened.in.last.12.months>=6,0.44,
+                                                                                     ifelse(WOE_transformed$No.of.trades.opened.in.last.12.months>=4,0.11,
+                                                                                            ifelse(WOE_transformed$No.of.trades.opened.in.last.12.months==3,0.003,
+                                                                                                   ifelse(WOE_transformed$No.of.trades.opened.in.last.12.months==2,-0.82,
+                                                                                                          ifelse(WOE_transformed$No.of.trades.opened.in.last.12.months==1,-1.02,-0.65))))))))
+
+## attribute - No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.
+print(IV$Tables$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.)
+
+WOE_transformed$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans. <- ifelse(WOE_transformed$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.>=9,0.01,
+                                                                                          ifelse(WOE_transformed$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.>=6,0.48,
+                                                                                                 ifelse(WOE_transformed$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.==5,0.59,
+                                                                                                        ifelse(WOE_transformed$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.==4,0.25,
+                                                                                                               ifelse(WOE_transformed$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.==3,0.16,
+                                                                                                                      ifelse(WOE_transformed$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.==2,0.14,
+                                                                                                                             ifelse(WOE_transformed$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.==1,-0.06,-1.07)))))))
+
+## attribute - No.of.PL.trades.opened.in.last.12.months
+print(IV$Tables$No.of.PL.trades.opened.in.last.12.months)
+
+WOE_transformed$No.of.PL.trades.opened.in.last.12.months <- ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.12.months==0,-0.89,
+                                                                   ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.12.months==1,-0.13,
+                                                                          ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.12.months==10,-0.07,
+                                                                                 ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.12.months==11,0.08,
+                                                                                        ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.12.months==12,0.92,
+                                                                                               ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.12.months==2,0.25,
+                                                                                                      ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.12.months==3,0.41,
+                                                                                                             ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.12.months==4,0.5,
+                                                                                                                    ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.12.months==5,0.43,
+                                                                                                                           ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.12.months==6,0.38,
+                                                                                                                                  ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.12.months==7,0.16,
+                                                                                                                                         ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.12.months==8,0.01,0.1))))))))))))
+
+## attribute - Total.No.of.Trades
+print(IV$Tables$Total.No.of.Trades)
+
+WOE_transformed$Total.No.of.Trades <- ifelse(WOE_transformed$Total.No.of.Trades>=20,-0.07,
+                                             ifelse(WOE_transformed$Total.No.of.Trades>=11,0.43,
+                                                    ifelse(WOE_transformed$Total.No.of.Trades>=9,0.54,
+                                                           ifelse(WOE_transformed$Total.No.of.Trades>=7,0.38,
+                                                                  ifelse(WOE_transformed$Total.No.of.Trades==6,0.13,
+                                                                         ifelse(WOE_transformed$Total.No.of.Trades==5,-0.05,
+                                                                                ifelse(WOE_transformed$Total.No.of.Trades==4,-0.45,
+                                                                                       ifelse(WOE_transformed$Total.No.of.Trades==3,-0.7,
+                                                                                              ifelse(WOE_transformed$Total.No.of.Trades==2,-1.02,-0.07)))))))))
+
+## attribute - Outstanding.Balance
+print(IV$Tables$Outstanding.Balance)
+
+WOE_transformed$Total.No.of.Trades <- ifelse(WOE_transformed$Total.No.of.Trades>=3282409,0.29,
+                                             ifelse(WOE_transformed$Total.No.of.Trades>=2961005,-0.83,
+                                                    ifelse(WOE_transformed$Total.No.of.Trades>=1357399,-0.38,
+                                                           ifelse(WOE_transformed$Total.No.of.Trades>=972456,0.4,
+                                                                  ifelse(WOE_transformed$Total.No.of.Trades>=774241,0.43,
+                                                                         ifelse(WOE_transformed$Total.No.of.Trades>=585423,0.45,
+                                                                                ifelse(WOE_transformed$Total.No.of.Trades>=386815,0.25,
+                                                                                       ifelse(WOE_transformed$Total.No.of.Trades>=25522,-0.13,
+                                                                                              ifelse(WOE_transformed$Total.No.of.Trades>=6847,-0.92,
+                                                                                                     ifelse(WOE_transformed$Total.No.of.Trades>=0,-0.77,-0.37))))))))))
+
+## attribute -  No.of.times.30.DPD.or.worse.in.last.6.months
+print(IV$Tables$No.of.times.30.DPD.or.worse.in.last.6.months)
+
