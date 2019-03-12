@@ -355,3 +355,127 @@ WOE_transformed$No.of.times.30.DPD.or.worse.in.last.6.months <- ifelse(WOE_trans
                                                                                             ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.6.months==3,0.77,
                                                                                                    ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.6.months==2,0.67,
                                                                                                           ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.6.months==1,0.46,-0.39)))))))
+
+## attribute - No.of.PL.trades.opened.in.last.6.months
+# print(IV$Tables$No.of.PL.trades.opened.in.last.6.months)
+
+WOE_transformed$No.of.PL.trades.opened.in.last.6.months <- ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.6.months==6,-0.46,
+                                                                  ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.6.months==5,0.05,
+                                                                         ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.6.months==4,0.35,
+                                                                                ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.6.months==3,0.42,
+                                                                                       ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.6.months==2,0.44,
+                                                                                              ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.6.months==1,0.2,-0.65))))))
+
+## attribute - No.of.times.30.DPD.or.worse.in.last.12.months
+# print(IV$Tables$No.of.times.30.DPD.or.worse.in.last.12.months)
+
+WOE_transformed$No.of.times.30.DPD.or.worse.in.last.12.months <- ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.12.months==9,0,
+                                                                        ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.12.months==8,0.77,
+                                                                               ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.12.months==7,0.96,
+                                                                                      ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.12.months==6,0.94,
+                                                                                             ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.12.months==5,0.97,
+                                                                                                    ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.12.months==4,0.81,
+                                                                                                           ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.12.months==3,0.74,
+                                                                                                                  ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.12.months==2,0.59,
+                                                                                                                         ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.12.months==1,0.07,-0.38)))))))))
+
+## attribute - No.of.times.90.DPD.or.worse.in.last.12.months
+# print(IV$Tables$No.of.times.90.DPD.or.worse.in.last.12.months)
+
+WOE_transformed$No.of.times.90.DPD.or.worse.in.last.12.months <- ifelse(WOE_transformed$No.of.times.90.DPD.or.worse.in.last.12.months==5,1.3,
+                                                                        ifelse(WOE_transformed$No.of.times.90.DPD.or.worse.in.last.12.months==4,0.96,
+                                                                               ifelse(WOE_transformed$No.of.times.90.DPD.or.worse.in.last.12.months==3,0.89,
+                                                                                      ifelse(WOE_transformed$No.of.times.90.DPD.or.worse.in.last.12.months==2,0.67,
+                                                                                             ifelse(WOE_transformed$No.of.times.90.DPD.or.worse.in.last.12.months==1,0.51,-0.36)))))
+
+## attribute - No.of.times.60.DPD.or.worse.in.last.6.months
+# print(IV$Tables$No.of.times.60.DPD.or.worse.in.last.6.months)
+
+WOE_transformed$No.of.times.60.DPD.or.worse.in.last.6.months <- ifelse(WOE_transformed$No.of.times.60.DPD.or.worse.in.last.6.months==5,-0.34,
+                                                                       ifelse(WOE_transformed$No.of.times.60.DPD.or.worse.in.last.6.months==4,0.54,
+                                                                              ifelse(WOE_transformed$No.of.times.60.DPD.or.worse.in.last.6.months==3,0.67,
+                                                                                     ifelse(WOE_transformed$No.of.times.60.DPD.or.worse.in.last.6.months==2,0.93,
+                                                                                            ifelse(WOE_transformed$No.of.times.60.DPD.or.worse.in.last.6.months==1,0.87,-0.36)))))
+
+## attribute - No.of.Inquiries.in.last.6.months..excluding.home...auto.loans.
+# print(IV$Tables$No.of.Inquiries.in.last.6.months..excluding.home...auto.loans.)
+
+WOE_transformed$No.of.Inquiries.in.last.6.months..excluding.home...auto.loans. <- ifelse(WOE_transformed$No.of.Inquiries.in.last.6.months..excluding.home...auto.loans.==0,-0.72,
+                                                                                         ifelse(WOE_transformed$No.of.Inquiries.in.last.6.months..excluding.home...auto.loans.==1,0.18,
+                                                                                                ifelse(WOE_transformed$No.of.Inquiries.in.last.6.months..excluding.home...auto.loans.==2,0.22,
+                                                                                                       ifelse(WOE_transformed$No.of.Inquiries.in.last.6.months..excluding.home...auto.loans.==3,0.55,
+                                                                                                              ifelse(WOE_transformed$No.of.Inquiries.in.last.6.months..excluding.home...auto.loans.==4,0.43,
+                                                                                                                     ifelse(WOE_transformed$No.of.Inquiries.in.last.6.months..excluding.home...auto.loans.==5,0.17,
+                                                                                                                            ifelse(WOE_transformed$No.of.Inquiries.in.last.6.months..excluding.home...auto.loans.==6,-0.01,
+                                                                                                                                   ifelse(WOE_transformed$No.of.Inquiries.in.last.6.months..excluding.home...auto.loans.==7,-0.2,
+                                                                                                                                          ifelse(WOE_transformed$No.of.Inquiries.in.last.6.months..excluding.home...auto.loans.==8,-0.07,
+                                                                                                                                                 ifelse(WOE_transformed$No.of.Inquiries.in.last.6.months..excluding.home...auto.loans.==9,-0.33,-0.85))))))))))
+## attribute - No.of.trades.opened.in.last.6.months
+# print(IV$Tables$No.of.trades.opened.in.last.6.months)
+
+WOE_transformed$No.of.trades.opened.in.last.6.months[which(is.na(WOE_transformed$No.of.trades.opened.in.last.6.months))] <- 0
+WOE_transformed$No.of.trades.opened.in.last.6.months <- ifelse(WOE_transformed$No.of.trades.opened.in.last.6.months==0,-0.66,
+                                                               ifelse(WOE_transformed$No.of.trades.opened.in.last.6.months==1,-0.48,
+                                                                      ifelse(WOE_transformed$No.of.trades.opened.in.last.6.months==2,0.23,
+                                                                             ifelse(WOE_transformed$No.of.trades.opened.in.last.6.months==3,0.43,
+                                                                                    ifelse(WOE_transformed$No.of.trades.opened.in.last.6.months==4,0.52,
+                                                                                           ifelse(WOE_transformed$No.of.trades.opened.in.last.6.months==5,0.33,
+                                                                                                  ifelse(WOE_transformed$No.of.trades.opened.in.last.6.months==6,0.1,
+                                                                                                         ifelse(WOE_transformed$No.of.trades.opened.in.last.6.months==7,-0.07,
+                                                                                                                ifelse(WOE_transformed$No.of.trades.opened.in.last.6.months==8,0.07,
+                                                                                                                       ifelse(WOE_transformed$No.of.trades.opened.in.last.6.months==9,-0.22,
+                                                                                                                              ifelse(WOE_transformed$No.of.trades.opened.in.last.6.months==10,-0.37,
+                                                                                                                                     ifelse(WOE_transformed$No.of.trades.opened.in.last.6.months==11,-0.33,0))))))))))))
+
+## attribute - No.of.times.60.DPD.or.worse.in.last.12.months
+# print(IV$Tables$No.of.times.60.DPD.or.worse.in.last.12.months)
+
+WOE_transformed$No.of.times.60.DPD.or.worse.in.last.12.months <- ifelse(WOE_transformed$No.of.times.60.DPD.or.worse.in.last.12.months==0,-0.35,
+                                                                        ifelse(WOE_transformed$No.of.times.60.DPD.or.worse.in.last.12.months==1,0.21,
+                                                                               ifelse(WOE_transformed$No.of.times.60.DPD.or.worse.in.last.12.months==2,0.61,
+                                                                                      ifelse(WOE_transformed$No.of.times.60.DPD.or.worse.in.last.12.months==3,0.75,
+                                                                                             ifelse(WOE_transformed$No.of.times.60.DPD.or.worse.in.last.12.months==4,0.88,
+                                                                                                    ifelse(WOE_transformed$No.of.times.60.DPD.or.worse.in.last.12.months==5,0.81,
+                                                                                                           ifelse(WOE_transformed$No.of.times.60.DPD.or.worse.in.last.12.months==6,1.1,0)))))))
+
+## attriute - No.of.times.90.DPD.or.worse.in.last.6.months
+# print(IV$Tables$No.of.times.90.DPD.or.worse.in.last.6.months)
+
+WOE_transformed$No.of.times.90.DPD.or.worse.in.last.6.months <- ifelse(WOE_transformed$No.of.times.90.DPD.or.worse.in.last.6.months==0,-0.26,
+                                                                       ifelse(WOE_transformed$No.of.times.90.DPD.or.worse.in.last.6.months==1,0.59,
+                                                                              ifelse(WOE_transformed$No.of.times.90.DPD.or.worse.in.last.6.months==2,0.81,1.04)))
+
+## attribute - No.of.months.in.current.residence
+# print(IV$Tables$No.of.months.in.current.residence)
+
+WOE_transformed$No.of.months.in.current.residence <- ifelse(WOE_transformed$No.of.months.in.current.residence>=98,-0.08,
+                                                            ifelse(WOE_transformed$No.of.months.in.current.residence>=73,0.14,
+                                                                   ifelse(WOE_transformed$No.of.months.in.current.residence>=50,0.13,
+                                                                          ifelse(WOE_transformed$No.of.months.in.current.residence>=29,0.3,
+                                                                                 ifelse(WOE_transformed$No.of.months.in.current.residence>=10,0.5,-0.27)))))
+
+## attribute - Income
+# print(IV$Tables$Income)
+
+WOE_transformed$Income <- ifelse(WOE_transformed$Income>=49,-0.36,
+                                 ifelse(WOE_transformed$Income>=42,-0.17,
+                                        ifelse(WOE_transformed$Income>=37,-0.26,
+                                               ifelse(WOE_transformed$Income>=32,-0.15,
+                                                      ifelse(WOE_transformed$Income>=27,0.08,
+                                                             ifelse(WOE_transformed$Income>=22,0.02,
+                                                                    ifelse(WOE_transformed$Income>=17,0.08,
+                                                                           ifelse(WOE_transformed$Income>=11,0.07,
+                                                                                  ifelse(WOE_transformed$Income>=6,0.27,0.3)))))))))
+
+## attribute - No.of.months.in.current.company
+# print(IV$Tables$No.of.months.in.current.company)
+
+WOE_transformed$No.of.months.in.current.company <- ifelse(WOE_transformed$No.of.months.in.current.company>=62,0.06,
+                                                          ifelse(WOE_transformed$No.of.months.in.current.company>=54,-0.22,
+                                                                 ifelse(WOE_transformed$No.of.months.in.current.company>=48,-0.22,
+                                                                        ifelse(WOE_transformed$No.of.months.in.current.company>=41,-0.18,
+                                                                               ifelse(WOE_transformed$No.of.months.in.current.company>=34,0.03,
+                                                                                      ifelse(WOE_transformed$No.of.months.in.current.company>=27,-0.08,
+                                                                                             ifelse(WOE_transformed$No.of.months.in.current.company>=20,0.04,
+                                                                                                    ifelse(WOE_transformed$No.of.months.in.current.company>=13,0.21,
+                                                                                                           ifelse(WOE_transformed$No.of.months.in.current.company>=6,0.17,0.1)))))))))
