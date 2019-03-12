@@ -1,19 +1,18 @@
 #### Important packages
-install.packages("Information")
-library(Information)
-library(ggplot2)
-library(reshape2)
-require(scales)
-library(dplyr)
-library(gridExtra)
+ # library(Information)
+ # library(ggplot2)
+ # library(reshape2)
+ # require(scales)
+ # library(dplyr)
+ # library(gridExtra)
 
 #### Loading the data
 Credit_Bureau_Data <- read.csv("Credit Bureau data.csv", header = TRUE, na.strings = c(""," ","NA"),stringsAsFactors = FALSE)
 Demographic_Data <- read.csv("Demographic data.csv", header = TRUE, na.strings = c(""," ","NA"),stringsAsFactors = FALSE)
 
 #### Check structure of the data frames
-str(Credit_Bureau_Data)
-str(Demographic_Data)
+# str(Credit_Bureau_Data)
+# str(Demographic_Data)
 
 #### Checking duplicates
 ## Comparing whole rows for duplicates
@@ -27,8 +26,8 @@ sum(duplicated(Demographic_Data$Application.ID))
 # 3 duplicates found in the application ids in both data sets
 
 ## Checking the complete rows of the duplicated application ids
-View(Credit_Bureau_Data[which(duplicated(Credit_Bureau_Data$Application.ID)),])
-View(Demographic_Data[which(duplicated(Demographic_Data$Application.ID)),])
+# View(Credit_Bureau_Data[which(duplicated(Credit_Bureau_Data$Application.ID)),])
+# View(Demographic_Data[which(duplicated(Demographic_Data$Application.ID)),])
 
 ## Removing the rows of duplicate application ids
 Credit_Bureau_Data <- Credit_Bureau_Data[-which(duplicated(Credit_Bureau_Data$Application.ID)),]
@@ -62,7 +61,7 @@ names(MasterData)[names(MasterData) == 'Performance.Tag.y'] <- 'Performance.Tag'
 
 #### WOE and IV
 MasterData_copy <- MasterData
-colnames(MasterData_copy)
+# colnames(MasterData_copy)
 
 ## Removing Application ID as it is not required for WOE/IV analysis
 MasterData_copy$Application.ID <- NULL
@@ -79,12 +78,12 @@ MasterData_copy[, col_names] <- lapply(col_names, function(x) as.numeric(as.char
 IV <- create_infotables(data=MasterData_copy, y="Performance.Tag", bins=10, parallel=TRUE)
 IV1 <- create_infotables(data=MasterData_copy, y="Performance.Tag", bins=10, parallel=TRUE)
 IV_Value <- data.frame(IV$Summary)
-IV_Value
+# IV_Value
 
 ## Variables' having IV value below 0.02 are not useful for prediction
 ## Hence the useful variables for prediction are
 IV_Useful_Variables <- IV_Value[IV_Value$IV>=0.02,]
-IV_Useful_Variables
+# IV_Useful_Variables
 ## Hence we see 18 variables are very useful in prediction
 
 
@@ -266,7 +265,7 @@ WOE_transformed <- MasterData
 
 
 ## attribute - Avgas.CC.Utilization.in.last.12.months
-print(IV$Tables$Avgas.CC.Utilization.in.last.12.months, row.names=FALSE)
+# print(IV$Tables$Avgas.CC.Utilization.in.last.12.months, row.names=FALSE)
 
 WOE_transformed$Avgas.CC.Utilization.in.last.12.months[which(is.na(WOE_transformed$Avgas.CC.Utilization.in.last.12.months))] <- 0.11
 WOE_transformed$Avgas.CC.Utilization.in.last.12.months <- ifelse(WOE_transformed$Avgas.CC.Utilization.in.last.12.months>=72,0.39,
@@ -281,7 +280,7 @@ WOE_transformed$Avgas.CC.Utilization.in.last.12.months <- ifelse(WOE_transformed
                                                                                                                          ifelse(WOE_transformed$Avgas.CC.Utilization.in.last.12.months>=0,-0.8,0.11))))))))))
 
 ## attribute - No.of.trades.opened.in.last.12.months
-print(IV$Tables$No.of.trades.opened.in.last.12.months)
+#print(IV$Tables$No.of.trades.opened.in.last.12.months)
 
 WOE_transformed$No.of.trades.opened.in.last.12.months <- ifelse(WOE_transformed$No.of.trades.opened.in.last.12.months>=13,0.01,
                                                                 ifelse(WOE_transformed$No.of.trades.opened.in.last.12.months>=10,0.49,
@@ -293,7 +292,7 @@ WOE_transformed$No.of.trades.opened.in.last.12.months <- ifelse(WOE_transformed$
                                                                                                           ifelse(WOE_transformed$No.of.trades.opened.in.last.12.months==1,-1.02,-0.65))))))))
 
 ## attribute - No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.
-print(IV$Tables$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.)
+# print(IV$Tables$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.)
 
 WOE_transformed$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans. <- ifelse(WOE_transformed$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.>=9,0.01,
                                                                                           ifelse(WOE_transformed$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.>=6,0.48,
@@ -304,7 +303,7 @@ WOE_transformed$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans. 
                                                                                                                              ifelse(WOE_transformed$No.of.Inquiries.in.last.12.months..excluding.home...auto.loans.==1,-0.06,-1.07)))))))
 
 ## attribute - No.of.PL.trades.opened.in.last.12.months
-print(IV$Tables$No.of.PL.trades.opened.in.last.12.months)
+# print(IV$Tables$No.of.PL.trades.opened.in.last.12.months)
 
 WOE_transformed$No.of.PL.trades.opened.in.last.12.months <- ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.12.months==0,-0.89,
                                                                    ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.12.months==1,-0.13,
@@ -320,7 +319,7 @@ WOE_transformed$No.of.PL.trades.opened.in.last.12.months <- ifelse(WOE_transform
                                                                                                                                          ifelse(WOE_transformed$No.of.PL.trades.opened.in.last.12.months==8,0.01,0.1))))))))))))
 
 ## attribute - Total.No.of.Trades
-print(IV$Tables$Total.No.of.Trades)
+# print(IV$Tables$Total.No.of.Trades)
 
 WOE_transformed$Total.No.of.Trades <- ifelse(WOE_transformed$Total.No.of.Trades>=20,-0.07,
                                              ifelse(WOE_transformed$Total.No.of.Trades>=11,0.43,
@@ -333,7 +332,7 @@ WOE_transformed$Total.No.of.Trades <- ifelse(WOE_transformed$Total.No.of.Trades>
                                                                                               ifelse(WOE_transformed$Total.No.of.Trades==2,-1.02,-0.07)))))))))
 
 ## attribute - Outstanding.Balance
-print(IV$Tables$Outstanding.Balance)
+# print(IV$Tables$Outstanding.Balance)
 
 WOE_transformed$Total.No.of.Trades <- ifelse(WOE_transformed$Total.No.of.Trades>=3282409,0.29,
                                              ifelse(WOE_transformed$Total.No.of.Trades>=2961005,-0.83,
@@ -347,5 +346,12 @@ WOE_transformed$Total.No.of.Trades <- ifelse(WOE_transformed$Total.No.of.Trades>
                                                                                                      ifelse(WOE_transformed$Total.No.of.Trades>=0,-0.77,-0.37))))))))))
 
 ## attribute -  No.of.times.30.DPD.or.worse.in.last.6.months
-print(IV$Tables$No.of.times.30.DPD.or.worse.in.last.6.months)
+# print(IV$Tables$No.of.times.30.DPD.or.worse.in.last.6.months)
 
+WOE_transformed$No.of.times.30.DPD.or.worse.in.last.6.months <- ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.6.months==7,0.48,
+                                                                       ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.6.months==6,0.72,
+                                                                              ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.6.months==5,1.05,
+                                                                                     ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.6.months==4,0.95,
+                                                                                            ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.6.months==3,0.77,
+                                                                                                   ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.6.months==2,0.67,
+                                                                                                          ifelse(WOE_transformed$No.of.times.30.DPD.or.worse.in.last.6.months==1,0.46,-0.39)))))))
