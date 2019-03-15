@@ -5,6 +5,7 @@
  # require(scales)
  # library(dplyr)
  # library(gridExtra)
+ # library(ROSE)
 
 #### Loading the data
 Credit_Bureau_Data <- read.csv("Credit Bureau data.csv", header = TRUE, na.strings = c(""," ","NA"),stringsAsFactors = FALSE)
@@ -83,7 +84,7 @@ IV_Value <- data.frame(IV$Summary)
 ## Variables' having IV value below 0.02 are not useful for prediction
 ## Hence the useful variables for prediction are
 IV_Useful_Variables <- IV_Value[IV_Value$IV>=0.02,]
-# IV_Useful_Variables
+IV_Useful_Variables
 ## Hence we see 18 variables are very useful in prediction
 
 
@@ -261,7 +262,7 @@ trades<-ggplot(MasterData_copy, aes(x = factor(Total.No.of.Trades),fill=factor(M
 trades
 
 #### WOE Transformation
-WOE_transformed <- MasterData
+WOE_transformed <- MasterData_copy
 
 
 ## attribute - Avgas.CC.Utilization.in.last.12.months
@@ -334,16 +335,16 @@ WOE_transformed$Total.No.of.Trades <- ifelse(WOE_transformed$Total.No.of.Trades>
 ## attribute - Outstanding.Balance
 # print(IV$Tables$Outstanding.Balance)
 
-WOE_transformed$Total.No.of.Trades <- ifelse(WOE_transformed$Total.No.of.Trades>=3282409,0.29,
-                                             ifelse(WOE_transformed$Total.No.of.Trades>=2961005,-0.83,
-                                                    ifelse(WOE_transformed$Total.No.of.Trades>=1357399,-0.38,
-                                                           ifelse(WOE_transformed$Total.No.of.Trades>=972456,0.4,
-                                                                  ifelse(WOE_transformed$Total.No.of.Trades>=774241,0.43,
-                                                                         ifelse(WOE_transformed$Total.No.of.Trades>=585423,0.45,
-                                                                                ifelse(WOE_transformed$Total.No.of.Trades>=386815,0.25,
-                                                                                       ifelse(WOE_transformed$Total.No.of.Trades>=25522,-0.13,
-                                                                                              ifelse(WOE_transformed$Total.No.of.Trades>=6847,-0.92,
-                                                                                                     ifelse(WOE_transformed$Total.No.of.Trades>=0,-0.77,-0.37))))))))))
+WOE_transformed$Outstanding.Balance <- ifelse(WOE_transformed$Outstanding.Balance>=3282409,0.29,
+                                              ifelse(WOE_transformed$Outstanding.Balance>=2961005,-0.83,
+                                                     ifelse(WOE_transformed$Outstanding.Balance>=1357399,-0.38,
+                                                            ifelse(WOE_transformed$Outstanding.Balance>=972456,0.4,
+                                                                   ifelse(WOE_transformed$Outstanding.Balance>=774241,0.43,
+                                                                          ifelse(WOE_transformed$Outstanding.Balance>=585423,0.45,
+                                                                                 ifelse(WOE_transformed$Outstanding.Balance>=386815,0.25,
+                                                                                        ifelse(WOE_transformed$Outstanding.Balance>=25522,-0.13,
+                                                                                               ifelse(WOE_transformed$Outstanding.Balance>=6847,-0.92,
+                                                                                                      ifelse(WOE_transformed$Outstanding.Balance>=0,-0.77,-0.37))))))))))
 
 ## attribute -  No.of.times.30.DPD.or.worse.in.last.6.months
 # print(IV$Tables$No.of.times.30.DPD.or.worse.in.last.6.months)
@@ -479,3 +480,16 @@ WOE_transformed$No.of.months.in.current.company <- ifelse(WOE_transformed$No.of.
                                                                                              ifelse(WOE_transformed$No.of.months.in.current.company>=20,0.04,
                                                                                                     ifelse(WOE_transformed$No.of.months.in.current.company>=13,0.21,
                                                                                                            ifelse(WOE_transformed$No.of.months.in.current.company>=6,0.17,0.1)))))))))
+
+## Selecting only the required variables and omitting others
+colnames(WOE_transformed)
+WOE_transformed1 <- WOE_transformed[,c(1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,22,26,27,28)]
+str(WOE_transformed1)
+
+
+## Imbalanced Classification handling
+table(WOE_transformed1$Performance.Tag)
+
+# Generate synthetic data using rose
+data.rose <- ROSE(Performance.Tag ~ .,data = WOE_transformed1,seed = 1)$data
+table(data.rose$Performance.Tag)
