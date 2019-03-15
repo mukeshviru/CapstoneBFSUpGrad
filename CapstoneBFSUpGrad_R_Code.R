@@ -6,6 +6,9 @@
  # library(dplyr)
  # library(gridExtra)
  # library(ROSE)
+ # library(caret)
+ # library(caTools)
+ # library(dummies)
 
 #### Loading the data
 Credit_Bureau_Data <- read.csv("Credit Bureau data.csv", header = TRUE, na.strings = c(""," ","NA"),stringsAsFactors = FALSE)
@@ -493,3 +496,136 @@ table(WOE_transformed1$Performance.Tag)
 # Generate synthetic data using rose
 data.rose <- ROSE(Performance.Tag ~ .,data = WOE_transformed1,seed = 1)$data
 table(data.rose$Performance.Tag)
+str(data.rose)
+
+## Logistic Regression
+
+# Creating dummy variables
+data.rose$Performance.Tag <- as.integer(data.rose$Performance.Tag)
+k1 <- data.rose
+data.rose <- dummy.data.frame(data.rose)
+data.rose$Performance.Tag <- as.factor(ifelse(data.rose$Performance.Tag == 1, "yes", "no"))
+
+# splitting into train and test data
+set.seed(1)
+split_indices <- sample.split(data.rose$Performance.Tag, SplitRatio = 0.70)
+
+train <- data.rose[split_indices, ]
+test <- data.rose[!split_indices, ]
+
+nrow(train)/nrow(data.rose)
+nrow(test)/nrow(data.rose)
+
+# Model 1: Logistic Regression
+logistic_1 <- glm(Performance.Tag ~ ., family = "binomial", data = train)
+summary(logistic_1)
+
+# Using stepwise algorithm for removing insignificant variables 
+logistic_2 <- stepAIC(logistic_1, direction = "both")
+
+logistic_3 <- glm(Performance.Tag ~ No.of.times.30.DPD.or.worse.in.last.6.months + 
+                    No.of.times.90.DPD.or.worse.in.last.12.months + No.of.times.60.DPD.or.worse.in.last.12.months + 
+                    No.of.times.30.DPD.or.worse.in.last.12.months + Avgas.CC.Utilization.in.last.12.months + 
+                    No.of.trades.opened.in.last.6.months + No.of.trades.opened.in.last.12.months + 
+                    No.of.PL.trades.opened.in.last.6.months + No.of.PL.trades.opened.in.last.12.months + 
+                    No.of.Inquiries.in.last.6.months..excluding.home...auto.loans. + 
+                    No.of.Inquiries.in.last.12.months..excluding.home...auto.loans. + 
+                    Outstanding.Balance + Total.No.of.Trades + Income + No.of.months.in.current.residence + 
+                    No.of.months.in.current.company, family = "binomial", data = train)
+# checking vif for logistic_3 
+vif(logistic_3)
+summary(logistic_3)
+
+# removing "No.of.PL.trades.opened.in.last.12.months"since vif is high and also the variable is not significant 
+logistic_4 <- glm(Performance.Tag ~ No.of.times.30.DPD.or.worse.in.last.6.months + 
+                    No.of.times.90.DPD.or.worse.in.last.12.months + No.of.times.60.DPD.or.worse.in.last.12.months + 
+                    No.of.times.30.DPD.or.worse.in.last.12.months + Avgas.CC.Utilization.in.last.12.months + 
+                    No.of.trades.opened.in.last.6.months + No.of.trades.opened.in.last.12.months + 
+                    No.of.PL.trades.opened.in.last.6.months + 
+                    No.of.Inquiries.in.last.6.months..excluding.home...auto.loans. + 
+                    No.of.Inquiries.in.last.12.months..excluding.home...auto.loans. + 
+                    Outstanding.Balance + Total.No.of.Trades + Income + No.of.months.in.current.residence + 
+                    No.of.months.in.current.company, family = "binomial", data = train)
+# checking vif for logistic_3 
+vif(logistic_4)
+summary(logistic_4)
+
+# removing "No.of.times.60.DPD.or.worse.in.last.12.months"since vif is high and also the variable is not significant 
+logistic_5 <- glm(Performance.Tag ~ No.of.times.30.DPD.or.worse.in.last.6.months + 
+                    No.of.times.90.DPD.or.worse.in.last.12.months + 
+                    No.of.times.30.DPD.or.worse.in.last.12.months + Avgas.CC.Utilization.in.last.12.months + 
+                    No.of.trades.opened.in.last.6.months + No.of.trades.opened.in.last.12.months + 
+                    No.of.PL.trades.opened.in.last.6.months + 
+                    No.of.Inquiries.in.last.6.months..excluding.home...auto.loans. + 
+                    No.of.Inquiries.in.last.12.months..excluding.home...auto.loans. + 
+                    Outstanding.Balance + Total.No.of.Trades + Income + No.of.months.in.current.residence + 
+                    No.of.months.in.current.company, family = "binomial", data = train)
+# checking vif for logistic_3 
+vif(logistic_5)
+summary(logistic_5)
+
+# removing "No.of.PL.trades.opened.in.last.6.months"since vif is high and also the variable is not significant 
+logistic_6 <- glm(Performance.Tag ~ No.of.times.30.DPD.or.worse.in.last.6.months + 
+                    No.of.times.90.DPD.or.worse.in.last.12.months + 
+                    No.of.times.30.DPD.or.worse.in.last.12.months + Avgas.CC.Utilization.in.last.12.months + 
+                    No.of.trades.opened.in.last.6.months + No.of.trades.opened.in.last.12.months +
+                    No.of.Inquiries.in.last.6.months..excluding.home...auto.loans. + 
+                    No.of.Inquiries.in.last.12.months..excluding.home...auto.loans. + 
+                    Outstanding.Balance + Total.No.of.Trades + Income + No.of.months.in.current.residence + 
+                    No.of.months.in.current.company, family = "binomial", data = train)
+# checking vif for logistic_3 
+vif(logistic_6)
+summary(logistic_6)
+
+# removing "Total.No.of.Trades"since vif is high and also the variable is not significant 
+logistic_7 <- glm(Performance.Tag ~ No.of.times.30.DPD.or.worse.in.last.6.months + 
+                    No.of.times.90.DPD.or.worse.in.last.12.months + 
+                    No.of.times.30.DPD.or.worse.in.last.12.months + Avgas.CC.Utilization.in.last.12.months + 
+                    No.of.trades.opened.in.last.6.months + No.of.trades.opened.in.last.12.months +
+                    No.of.Inquiries.in.last.6.months..excluding.home...auto.loans. + 
+                    No.of.Inquiries.in.last.12.months..excluding.home...auto.loans. + 
+                    Outstanding.Balance + Income + No.of.months.in.current.residence + 
+                    No.of.months.in.current.company, family = "binomial", data = train)
+# checking vif for logistic_3 
+vif(logistic_7)
+summary(logistic_7)
+
+# removing "No.of.trades.opened.in.last.6.months"since vif is high and also the variable is not significant 
+logistic_8 <- glm(Performance.Tag ~ No.of.times.30.DPD.or.worse.in.last.6.months + 
+                    No.of.times.90.DPD.or.worse.in.last.12.months + 
+                    No.of.times.30.DPD.or.worse.in.last.12.months + Avgas.CC.Utilization.in.last.12.months + 
+                    No.of.trades.opened.in.last.12.months +
+                    No.of.Inquiries.in.last.6.months..excluding.home...auto.loans. + 
+                    No.of.Inquiries.in.last.12.months..excluding.home...auto.loans. + 
+                    Outstanding.Balance + Income + No.of.months.in.current.residence + 
+                    No.of.months.in.current.company, family = "binomial", data = train)
+# checking vif for logistic_3 
+vif(logistic_8)
+summary(logistic_8)
+
+# removing "No.of.months.in.current.residence"since vif is high and also the variable is not significant 
+logistic_9 <- glm(Performance.Tag ~ No.of.times.30.DPD.or.worse.in.last.6.months + 
+                    No.of.times.90.DPD.or.worse.in.last.12.months + 
+                    No.of.times.30.DPD.or.worse.in.last.12.months + Avgas.CC.Utilization.in.last.12.months + 
+                    No.of.trades.opened.in.last.12.months +
+                    No.of.Inquiries.in.last.6.months..excluding.home...auto.loans. + 
+                    No.of.Inquiries.in.last.12.months..excluding.home...auto.loans. + 
+                    Outstanding.Balance + Income + 
+                    No.of.months.in.current.company, family = "binomial", data = train)
+# checking vif for logistic_3 
+vif(logistic_9)
+summary(logistic_9)
+
+logistic_final <- logistic_9
+
+# Predicting probabilities of responding for the test data
+predictions_logit <- predict(logistic_final, newdata = test[, -19], type = "response")
+summary(predictions_logit)
+
+# Model Evaluation: Logistic Regression
+# Let's use the probability cutoff of 50%.
+predicted_response <- factor(ifelse(predictions_logit >= 0.48, "yes", "no"))
+
+# Creating confusion matrix for identifying the model evaluation.
+conf <- confusionMatrix(predicted_response, test$Performance.Tag, positive = "yes")
+conf
